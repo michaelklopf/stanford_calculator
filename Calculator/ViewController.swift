@@ -48,15 +48,13 @@ class ViewController: UIViewController {
         }
         switch operation {
         case "x":
-            performOperation({(op1, op2) in
-                return op1 * op2;
-            })
-//        case "÷":
-//            performOperation(divide)
-//        case "+":
-//            performOperation(add)
-//        case "-":
-//            performOperation(substract)
+            performOperation({ (op1, op2) in op1 * op2 })
+        case "÷":
+            performOperation({ (op1, op2) in op2 / op1 })
+        case "+":
+            performOperation({ (op1, op2) in op1 + op2 })
+        case "-":
+            performOperation({ (op1, op2) in op2 - op1 })
         default: break
         }
     }
