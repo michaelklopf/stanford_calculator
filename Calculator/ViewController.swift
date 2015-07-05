@@ -10,18 +10,27 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var history: UILabel!
     
     var userIsInTheMiddleOfTypingANumber = false
+    
+    var userTypesAFloat = false
     
     let brain = CalculatorBrain()
     
     var displayValue: Double {
         get {
-            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            if display.text! == "π" {
+                return M_PI
+            } else {
+                return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            }
         }
         set {
             display.text = "\(newValue)"
+            history.text = brain.getHistory()
             userIsInTheMiddleOfTypingANumber = false
+            userTypesAFloat = false
         }
     }
 
@@ -35,8 +44,17 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func appendDot(sender: UIButton) {
+        let dot = sender.currentTitle!
+        if !userTypesAFloat {
+            display.text = display.text! + dot
+            userTypesAFloat = true
+        }
+    }
+    
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
+        userTypesAFloat = false
         if let result = brain.pushOperand(displayValue) {
             displayValue = result
         } else {
@@ -56,6 +74,11 @@ class ViewController: UIViewController {
                 displayValue = 0
             }
         }
+    }
+    
+    @IBAction func clear(sender: UIButton) {
+        brain.reset()
+        displayValue = 0
     }
     
     override func viewDidLoad() {

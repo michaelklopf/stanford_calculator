@@ -42,6 +42,8 @@ class CalculatorBrain {
         learnOp(Op.BinaryOperation("+", +))
         learnOp(Op.BinaryOperation("-", { $1 - $0 }))
         
+        learnOp(Op.UnaryOperation("sin", sin))
+        learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.UnaryOperation("√", sqrt))
     }
     
@@ -68,6 +70,18 @@ class CalculatorBrain {
             }
         }
         return (nil, ops)
+    }
+    
+    func getHistory() -> String {
+        if opStack.isEmpty {
+            return "0"
+        } else {
+            return "\(opStack)"
+        }
+    }
+    
+    func reset() {
+        opStack = [Op]()
     }
     
     func evaluate() -> Double? {
