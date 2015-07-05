@@ -19,7 +19,7 @@ class CalculatorBrain {
             get {
                 switch self {
                 case .Operand(let operand):
-                    return "\(operand)"
+                    return String(format: "%.2f", operand) //return "\(operand)"
                 case .UnaryOperation(let symbol, _):
                     return symbol
                 case .BinaryOperation(let symbol, _):
@@ -76,7 +76,12 @@ class CalculatorBrain {
         if opStack.isEmpty {
             return "0"
         } else {
-            return "\(opStack)"
+            var historyText = ""
+            for op in opStack {
+                historyText = historyText + op.description + ", "
+            }
+            //let range = advance(historyText.endIndex, -2)..<historyText.endIndex
+            return historyText//.removeRange(range)
         }
     }
     
