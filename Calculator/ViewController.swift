@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     
     var userIsInTheMiddleOfTypingANumber = false
     
-    var operandStack = Array<Double>()
+    let brain = CalculatorBrain()
     
     var displayValue: Double {
         get {
@@ -37,41 +37,24 @@ class ViewController: UIViewController {
     
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
-        operandStack.append(displayValue)
-        print("operandStack is \(operandStack)")
+        if let result = brain.pushOperand(displayValue) {
+            displayValue = result
+        } else {
+            displayValue = 0
+        }
     }
     
     @IBAction func operate(sender: UIButton) {
-        let operation = sender.currentTitle!
         if userIsInTheMiddleOfTypingANumber {
             enter()
         }
-        switch operation {
-        case "x":
-            performOperation { $0 * $1 }
-        case "÷":
-            performOperation { $1 / $0 }
-        case "+":
-            performOperation { $0 + $1 }
-        case "-":
-            performOperation { $1 - $0 }
-        case "√":
-            performOperation { sqrt($0)}
-        default: break
-        }
-    }
-    
-    func performOperation(operation: (Double, Double) -> Double) { // ... is a function type
-        if operandStack.count >= 2 {
-            displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
-            enter()
-        }
-    }
-    
-    private func performOperation(operation: Double -> Double) {
-        if operandStack.count >= 1 {
-            displayValue = operation(operandStack.removeLast())
-            enter()
+        
+        if let operation = sender.currentTitle {
+            if let result = brain.performOperation(operation) {
+                displayValue = result
+            } else {
+                displayValue = 0
+            }
         }
     }
     
