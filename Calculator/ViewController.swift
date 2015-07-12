@@ -18,17 +18,29 @@ class ViewController: UIViewController {
     
     let brain = CalculatorBrain()
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
             if display.text! == "π" {
                 return M_PI
+            }
+            
+            if let displayText = display.text {
+                if let numberValue = NSNumberFormatter().numberFromString(displayText) {
+                    return numberValue.doubleValue
+                } else {
+                    return nil
+                }
             } else {
-                return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+                return nil
             }
         }
         set {
-            display.text = "\(newValue)"
-            history.text = brain.getHistory()
+            if let displayValue = newValue {
+                display.text = "\(displayValue)"
+            } else {
+                display.text = ""
+            }
+            history.text = brain.description
             userIsInTheMiddleOfTypingANumber = false
             userTypesAFloat = false
         }
@@ -55,7 +67,7 @@ class ViewController: UIViewController {
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
         userTypesAFloat = false
-        if let result = brain.pushOperand(displayValue) {
+        if let result = brain.pushOperand(displayValue!) {
             displayValue = result
         } else {
             displayValue = 0
@@ -70,7 +82,8 @@ class ViewController: UIViewController {
         if let operation = sender.currentTitle {
             if let result = brain.performOperation(operation) {
                 displayValue = result
-                history.text = history.text! + "= " + result.description
+                let historyResult = String(format: "%.2f", result)
+                history.text = history.text! + "= " + historyResult
             } else {
                 displayValue = 0
             }
