@@ -20,10 +20,6 @@ class ViewController: UIViewController {
     
     var displayValue: Double? {
         get {
-            if display.text! == "π" {
-                return M_PI
-            }
-            
             if let displayText = display.text {
                 if let numberValue = NSNumberFormatter().numberFromString(displayText) {
                     return numberValue.doubleValue
@@ -38,7 +34,7 @@ class ViewController: UIViewController {
             if let displayValue = newValue {
                 display.text = "\(displayValue)"
             } else {
-                display.text = ""
+                display.text = " "
             }
             history.text = brain.description
             userIsInTheMiddleOfTypingANumber = false
@@ -70,7 +66,7 @@ class ViewController: UIViewController {
         if let result = brain.pushOperand(displayValue!) {
             displayValue = result
         } else {
-            displayValue = 0
+            displayValue = nil
         }
     }
     
@@ -82,17 +78,29 @@ class ViewController: UIViewController {
         if let operation = sender.currentTitle {
             if let result = brain.performOperation(operation) {
                 displayValue = result
-                let historyResult = String(format: "%.2f", result)
-                history.text = history.text! + "= " + historyResult
+                history.text = history.text! + "= "
             } else {
-                displayValue = 0
+                displayValue = nil
             }
         }
     }
     
+    @IBAction func setM(sender: UIButton) {
+        brain.variableValues["M"] = displayValue
+        displayValue = brain.evaluate()
+        userIsInTheMiddleOfTypingANumber = false
+    }
+
+    @IBAction func pushM(sender: UIButton) {
+        brain.pushOperand("M")
+        displayValue = brain.evaluate()
+    }
+
     @IBAction func clear(sender: UIButton) {
         brain.reset()
         displayValue = 0
+        history.text = "0"
+        brain.variableValues.removeValueForKey("M")
     }
     
     override func viewDidLoad() {
@@ -105,6 +113,4 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
 }
-

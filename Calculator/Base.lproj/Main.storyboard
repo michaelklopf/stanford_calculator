@@ -178,7 +178,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="π"/>
                                 <connections>
-                                    <action selector="appendDigit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fQk-Tb-xFR"/>
+                                    <action selector="operate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bv3-3o-IwH"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IkK-FJ-zmg">
@@ -200,6 +200,10 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n7U-iW-4Yr">
                                 <rect key="frame" x="28" y="233.5" width="84" height="114"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="→M"/>
+                                <connections>
+                                    <action selector="setM:" destination="BYZ-38-t0r" eventType="touchUpInside" id="whn-o3-yxw"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sg8-Le-fvv">
                                 <rect key="frame" x="28" y="477.5" width="84" height="114"/>
@@ -208,6 +212,10 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QlD-GS-YVH">
                                 <rect key="frame" x="28" y="355" width="84" height="114.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="M"/>
+                                <connections>
+                                    <action selector="pushM:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kNI-YD-xLO"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

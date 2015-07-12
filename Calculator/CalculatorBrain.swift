@@ -12,6 +12,7 @@ class CalculatorBrain {
     
     private enum Op: CustomStringConvertible {
         case Operand(Double)
+        case Constant(String, Double)
         case UnaryOperation(String, Double -> Double)
         case BinaryOperation(String, (Double, Double) -> Double)
         case Variable(String)
@@ -21,6 +22,8 @@ class CalculatorBrain {
                 switch self {
                 case .Operand(let operand):
                     return String(format: "%.2f", operand) //return "\(operand)"
+                case .Constant(let symbol, _):
+                    return symbol
                 case .UnaryOperation(let symbol, _):
                     return symbol
                 case .BinaryOperation(let symbol, _):
@@ -46,7 +49,7 @@ class CalculatorBrain {
     
     private var knownOps = [String: Op]()//Dictionary<String, Op>()
     
-    private var variableValues = [String: Double]()
+    var variableValues = [String: Double]()
 
     init() {
         func learnOp(op: Op) {
@@ -60,6 +63,7 @@ class CalculatorBrain {
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.UnaryOperation("√", sqrt))
+        learnOp(Op.Constant("π", M_PI))
     }
     
     private func describe(ops: [Op]) -> (description: String?, remainingOps: [Op]) {
@@ -70,6 +74,9 @@ class CalculatorBrain {
             case .Operand(let operand):
                 let operandDesc = operand.description ?? "?"
                 return (operandDesc, remainingOps)
+                
+            case .Constant(let symbol, _):
+                return (symbol, remainingOps)
 
             case .UnaryOperation(let symbol, _):
                 let operandDescription = describe(remainingOps)
@@ -84,7 +91,7 @@ class CalculatorBrain {
                 let operandDescription2 = describe(operandDescription1.remainingOps)
                 let operand2 = operandDescription2.description ?? "?"
                 
-                return ("(" + operand2 + symbol + operand1 + ")", operandDescription2.remainingOps)
+                return ("(" + operand2 + ")" + symbol + "(" + operand1 + ")", operandDescription2.remainingOps)
 
             case .Variable(let symbol):
                 return (symbol, remainingOps)
@@ -100,6 +107,8 @@ class CalculatorBrain {
             switch op {
             case .Operand(let operand):
                 return (operand, remainingOps)
+            case .Constant(_, let constantValue):
+                return (constantValue, remainingOps)
             case .UnaryOperation(_, let operation):
                 let operandEvaluation = evaluate(remainingOps)
                 if let operand = operandEvaluation.result {
@@ -122,19 +131,6 @@ class CalculatorBrain {
             }
         }
         return (nil, ops)
-    }
-    
-    func getHistory() -> String {
-        if opStack.isEmpty {
-            return "0"
-        } else {
-            var historyText = ""
-            for op in opStack {
-                historyText = historyText + op.description + ", "
-            }
-            //let range = advance(historyText.endIndex, -2)..<historyText.endIndex
-            return historyText//.removeRange(range)
-        }
     }
     
     func reset() {
@@ -163,4 +159,5 @@ class CalculatorBrain {
         }
         return evaluate()
     }
+
 }
